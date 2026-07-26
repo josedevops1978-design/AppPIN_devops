@@ -1,4 +1,6 @@
-require("dotenv").config();
+require("dotenv").config({
+    path: "../.env"
+});
 
 const app = require("./app");
 
@@ -12,7 +14,7 @@ app.listen(PORT, () => {
 
     console.log("===================================");
 
-    console.log(" Sistema Gestión Usuarios ");
+    console.log(" Sistema GestiÃ³n Usuarios ");
 
     console.log("===================================");
 

@@ -4,11 +4,15 @@ const router = express.Router();
 
 const database = require("../config/database");
 
+const authRoutes = require("./authRoutes");
+
+router.use("/auth", authRoutes);
+
 router.get("/", (req, res) => {
 
     res.json({
 
-        proyecto: "Gestión Usuarios DevOps",
+        proyecto: "GestiÃ³n Usuarios DevOps",
 
         version: "1.0"
 
@@ -54,7 +58,7 @@ router.get("/info", (req, res) => {
 
     res.json({
 
-        proyecto: "Sistema Gestión Usuarios",
+        proyecto: "Sistema GestiÃ³n Usuarios",
 
         frontend: "Bootstrap",
 
