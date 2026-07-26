@@ -8,9 +8,13 @@ const authRoutes = require("./authRoutes");
 
 const profileRoutes = require("./profileRoutes");
 
-router.use("/auth", authRoutes);
+const usersRoutes = require("./usersRoutes");
 
 router.use("/profile", profileRoutes);
+
+router.use("/auth", authRoutes);
+
+router.use("/users", usersRoutes);
 
 router.get("/", (req, res) => {
 

@@ -88,8 +88,45 @@ const findById = (id) => {
 
 };
 
+const findAll = () => {
+
+    return new Promise((resolve, reject) => {
+
+        const sql = `
+            SELECT
+                id,
+                nombre,
+                apellido,
+                fecha_nacimiento,
+                sexo,
+                direccion,
+                telefono,
+                email,
+                provincia,
+                nivel_educacion,
+                activo
+            FROM usuarios
+            WHERE activo = 1
+            ORDER BY apellido, nombre
+        `;
+
+        db.query(sql, (error, results) => {
+
+            if (error) {
+                reject(error);
+                return;
+            }
+
+            resolve(results);
+
+        });
+
+    });
+
+};
 
 module.exports = {
     findByEmail,
-    findById
+    findById,
+    findAll
 };
