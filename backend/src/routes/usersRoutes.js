@@ -12,4 +12,10 @@ router.get(
     usersController.getAllUsers
 );
 
+router.get(
+    "/:id",
+    authMiddleware.verifyToken,
+    usersController.getUserById
+);
+
 module.exports = router;

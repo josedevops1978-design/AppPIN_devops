@@ -6,8 +6,16 @@ const getAllUsers = async () => {
 
 };
 
+const getUserById = async (id) => {
+
+    return await userModel.findById(id);
+
+};
+
+
 module.exports = {
 
-    getAllUsers
+    getAllUsers,
+    getUserById	
 
 };
