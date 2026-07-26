@@ -1,0 +1,52 @@
+const db = require("../config/database");
+
+
+const findByEmail = (email) => {
+
+    return new Promise((resolve, reject) => {
+
+        const sql = `
+            SELECT
+                id,
+                nombre,
+                apellido,
+                email,
+                password,
+                activo
+            FROM usuarios
+            WHERE email = ?
+        `;
+
+
+        db.query(sql, [email], (error, results) => {
+
+
+            if(error){
+
+                reject(error);
+                return;
+
+            }
+
+
+            if(results.length === 0){
+
+                resolve(null);
+                return;
+
+            }
+
+
+            resolve(results[0]);
+
+        });
+
+
+    });
+
+};
+
+
+module.exports = {
+    findByEmail
+};
