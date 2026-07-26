@@ -1,0 +1,22 @@
+# Node
+node_modules/
+
+# Variables de entorno
+.env
+
+# Logs
+*.log
+
+# Docker
+*.pid
+
+# Terraform
+terraform/.terraform/
+terraform/*.tfstate
+terraform/*.tfstate.backup
+
+# VS Code
+.vscode/
+
+# Linux
+.DS_Store
