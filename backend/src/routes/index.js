@@ -6,7 +6,11 @@ const database = require("../config/database");
 
 const authRoutes = require("./authRoutes");
 
+const profileRoutes = require("./profileRoutes");
+
 router.use("/auth", authRoutes);
+
+router.use("/profile", profileRoutes);
 
 router.get("/", (req, res) => {
 
