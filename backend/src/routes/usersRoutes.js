@@ -18,4 +18,22 @@ router.get(
     usersController.getUserById
 );
 
+router.post(
+    "/",
+    authMiddleware.verifyToken,
+    usersController.createUser
+);
+
+router.put(
+    "/:id",
+    authMiddleware.verifyToken,
+    usersController.updateUser
+);
+
+router.delete(
+    "/:id",
+    authMiddleware.verifyToken,
+    usersController.deactivateUser
+);
+
 module.exports = router;
