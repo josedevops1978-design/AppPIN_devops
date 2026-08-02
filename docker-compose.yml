@@ -1,0 +1,58 @@
+
+services:
+
+  mysql:
+
+    image: mysql:8.4
+
+    container_name: mysql-gestion-usuarios
+
+    restart: unless-stopped
+
+    environment:
+      MYSQL_ROOT_PASSWORD: Root123456!
+      MYSQL_DATABASE: gestion_usuarios
+      MYSQL_USER: appuser
+      MYSQL_PASSWORD: App123456!
+
+    ports:
+      - "3307:3306"
+
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./database/init:/docker-entrypoint-initdb.d
+
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+
+  backend:
+
+    build: ./backend
+
+    container_name: backend-gestion-usuarios
+
+    restart: unless-stopped
+
+    depends_on:
+      mysql:
+        condition: service_healthy
+
+    environment:
+      PORT: 3000
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: appuser
+      DB_PASSWORD: App123456!
+      DB_DATABASE: gestion_usuarios
+      JWT_SECRET: CAMBIAR_ESTA_CLAVE_EN_PRODUCCION
+
+    ports:
+      - "3000:3000"
+
+volumes:
+
+  mysql_data:

@@ -3,9 +3,11 @@ node_modules/
 
 # Variables de entorno
 .env
+.env.*
 
 # Logs
 *.log
+logs/
 
 # Docker
 *.pid
@@ -18,5 +20,13 @@ terraform/*.tfstate.backup
 # VS Code
 .vscode/
 
-# Linux
+# Linux / macOS
 .DS_Store
+Thumbs.db
+
+# Cobertura de pruebas
+coverage/
+
+# Dependencias temporales
+npm-debug.log*
+yarn-error.log*

@@ -1,5 +1,3 @@
-USE gestion_usuarios;
-
 INSERT INTO usuarios (
     nombre,
     apellido,

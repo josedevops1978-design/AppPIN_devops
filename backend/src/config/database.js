@@ -20,18 +20,14 @@ connection.connect((error) => {
 
     if (error) {
 
-        console.error("");
-
-        console.error("ERROR CONECTANDO MYSQL");
-
-        console.error(error);
+        console.error("Error conectando a MySQL:");
+        console.error(error.message);
 
         process.exit(1);
 
     }
 
-    console.log("? MySQL conectado");
-
+    console.log("✅ MySQL conectado");
 });
 
 module.exports = connection;
