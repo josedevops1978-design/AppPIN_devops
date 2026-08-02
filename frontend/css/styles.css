@@ -1,0 +1,25 @@
+body{
+
+    background:#f5f6fa;
+
+}
+
+.card{
+
+    border:none;
+
+    border-radius:12px;
+
+}
+
+.card-body{
+
+    padding:40px;
+
+}
+
+h2{
+
+    font-weight:600;
+
+}
