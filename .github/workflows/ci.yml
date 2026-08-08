@@ -35,5 +35,14 @@ jobs:
       - name: Run ESLint
         run: npm run lint
 
+      - name: Security scan with Snyk
+        uses: snyk/actions/node@v1
+        env:
+          SNYK_TOKEN: ${{ secrets.SNYK_TOKEN }}
+        with:
+       	      args: --severity-threshold=high
+              command: test
+              working-directory: backend
+
       - name: Run tests
         run: npm test
