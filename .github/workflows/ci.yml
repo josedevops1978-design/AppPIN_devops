@@ -3,10 +3,10 @@ name: CI Backend
 on:
   push:
     branches:
-      - master
+      - main
   pull_request:
     branches:
-      - master
+      - main
 
 jobs:
   backend-ci:
