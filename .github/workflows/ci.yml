@@ -42,7 +42,7 @@ jobs:
         with:
           args: --severity-threshold=high
           command: test
-          working-directory: backend
+          args: --file=backend/package.json --severity-threshold=high
 
       - name: Run tests
         run: npm test
