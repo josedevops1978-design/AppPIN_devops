@@ -81,4 +81,5 @@ jobs:
         env:
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
           TF_VAR_mysql_database: ${{ secrets.MYSQL_DATABASE }}
+          TF_VAR_mysql_password: ${{ secrets.MYSQL_PASSWORD }}
         run: terraform plan
