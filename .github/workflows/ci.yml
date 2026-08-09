@@ -78,6 +78,6 @@ jobs:
 
       - name: Terraform Plan
         working-directory: terraform
-	env:
+        env:
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
         run: terraform plan
