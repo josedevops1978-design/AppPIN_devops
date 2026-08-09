@@ -82,5 +82,5 @@ jobs:
           TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
           TF_VAR_mysql_database: ${{ secrets.MYSQL_DATABASE }}
           TF_VAR_mysql_password: ${{ secrets.MYSQL_PASSWORD }}
-           TF_VAR_mysql_root_password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          TF_VAR_mysql_root_password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
         run: terraform plan
