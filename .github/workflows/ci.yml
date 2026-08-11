@@ -108,6 +108,10 @@ jobs:
         with:
           terraform_version: 1.15.8
 
+      - name: Terraform Init
+        working-directory: terraform
+        run: terraform init
+
       - name: Download Terraform plan
         uses: actions/download-artifact@v5
         with:
