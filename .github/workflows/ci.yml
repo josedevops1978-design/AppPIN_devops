@@ -9,8 +9,8 @@ on:
       - main
 
 jobs:
-  backend-ci:
 
+  backend-ci:
     runs-on: ubuntu-latest
 
     defaults:
@@ -91,3 +91,29 @@ jobs:
         with:
           name: terraform-plan
           path: terraform/tfplan
+
+  deploy:
+    name: Terraform Deploy
+    runs-on: ubuntu-latest
+    needs: backend-ci
+    if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+
+    steps:
+
+      - name: Checkout repository
+        uses: actions/checkout@v5
+
+      - name: Setup Terraform
+        uses: hashicorp/setup-terraform@v3
+        with:
+          terraform_version: 1.15.8
+
+      - name: Download Terraform plan
+        uses: actions/download-artifact@v5
+        with:
+          name: terraform-plan
+          path: terraform
+
+      - name: Verify Terraform plan
+        working-directory: terraform
+        run: ls -lh tfplan
