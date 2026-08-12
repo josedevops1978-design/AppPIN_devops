@@ -1,0 +1,18 @@
+# Copiar este archivo a terraform.tfvars y completar con los valores reales.
+# terraform.tfvars NUNCA se sube al repo (ver .gitignore).
+
+# --- VM de VirtualBox ya creada ---
+vm_ssh_host     = "192.168.56.10"
+vm_ssh_port     = 22
+vm_ssh_user     = "ubuntu"
+vm_ssh_password = "CHANGE_ME"
+
+# --- Registro del runner en GitHub ---
+github_owner = "matiaspasa-cloudhesive"
+github_repo  = "AppPIN_devops"
+github_pat   = "CHANGE_ME" # PAT con permiso Administration: Read and write sobre el repo
+
+runner_name     = "virtualbox-runner-01"
+runner_labels   = "self-hosted,linux,x64,virtualbox"
+runner_work_dir = "_work"
+runner_version  = "2.321.0"
