@@ -1,16 +1,13 @@
 name: CI Backend
 
-# Disparo temporalmente limitado a manual (workflow_dispatch) mientras se
-# ajusta el pipeline, para no consumir minutos de GitHub Actions en cada push.
-# Para volver a activarlo automaticamente, descomentar el bloque "push"/"pull_request".
 on:
   workflow_dispatch:
-  # push:
-  #   branches:
-  #     - main
-  # pull_request:
-  #   branches:
-  #     - main
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
 
 jobs:
 
