@@ -16,3 +16,13 @@ runner_name     = "virtualbox-runner-01"
 runner_labels   = "self-hosted,linux,x64,virtualbox"
 runner_work_dir = "_work"
 runner_version  = "2.321.0"
+
+# --- .env de la app (docker compose). Se escribe en la VM, en ---
+# --- /home/<vm_ssh_user>/<app_deploy_dir>/.env, para que el job deploy ---
+# --- del CI (docker compose up) lo encuentre sin pasarle los secrets. ---
+app_deploy_dir       = "pin-app-deploy"
+mysql_root_password  = "CHANGE_ME"
+mysql_database       = "gestion_usuarios"
+mysql_user           = "appuser"
+mysql_password       = "CHANGE_ME"
+jwt_secret           = "CHANGE_ME"

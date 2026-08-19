@@ -179,27 +179,20 @@ jobs:
         env:
           REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
         run: |
+          # DEPLOY_DIR ya existe con un .env (lo deja terraform/runner-bootstrap),
+          # asi que no se puede usar 'git clone' (falla en directorio no vacio).
           DEPLOY_DIR="$HOME/pin-app-deploy"
-          if [ -d "$DEPLOY_DIR/.git" ]; then
-            git -C "$DEPLOY_DIR" fetch origin "${{ github.ref_name }}"
-            git -C "$DEPLOY_DIR" reset --hard "origin/${{ github.ref_name }}"
-          else
-            git clone --branch "${{ github.ref_name }}" "$REPO_URL" "$DEPLOY_DIR"
+          mkdir -p "$DEPLOY_DIR"
+          if [ ! -d "$DEPLOY_DIR/.git" ]; then
+            git -C "$DEPLOY_DIR" init
+            git -C "$DEPLOY_DIR" remote add origin "$REPO_URL"
           fi
+          git -C "$DEPLOY_DIR" fetch origin "${{ github.ref_name }}"
+          git -C "$DEPLOY_DIR" checkout -f -B "${{ github.ref_name }}" "origin/${{ github.ref_name }}"
           echo "DEPLOY_DIR=$DEPLOY_DIR" >> "$GITHUB_ENV"
 
       - name: Deploy with Docker Compose
+        # Las variables las toma del .env que dejo terraform/runner-bootstrap
+        # en DEPLOY_DIR (docker compose lo lee automaticamente de ese directorio).
         working-directory: ${{ env.DEPLOY_DIR }}
-        env:
-          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          MYSQL_USER: ${{ secrets.MYSQL_USER }}
-          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          PORT: 3000
-          DB_HOST: mysql
-          DB_PORT: 3306
-          DB_USER: ${{ secrets.MYSQL_USER }}
-          DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
-          DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
-          JWT_SECRET: ${{ secrets.JWT_SECRET }}
         run: docker compose up -d --force-recreate

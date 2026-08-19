@@ -7,10 +7,13 @@ Instala: Docker Engine, plugin `docker compose` + binario clásico `docker-compo
 Luego descarga el agente `actions-runner`, lo configura contra el repo y lo deja corriendo
 como servicio systemd.
 
-Este módulo es independiente del `terraform/` de la raíz (que crea los contenedores mysql/backend
-vía el provider `docker` contra el socket local — pensado para correr dentro del propio runner
-durante el CI). Este módulo se corre una sola vez, manualmente, desde la máquina que tiene
-acceso SSH a la VM.
+También deja escrito en la VM, en `/home/<vm_ssh_user>/<app_deploy_dir>/.env` (por defecto
+`~/pin-app-deploy/.env`), el archivo `.env` que necesita `docker-compose.yml` de la raíz del
+repo (`MYSQL_*`, `DB_*`, `JWT_SECRET`). El job `deploy` del CI clona/actualiza el repo en esa
+misma carpeta y corre `docker compose up` ahí, tomando esas variables automáticamente.
+
+Este módulo se corre una sola vez, manualmente, desde la máquina que tiene acceso SSH a la VM
+(y de nuevo cada vez que cambian las credenciales de la app o la config del runner).
 
 ## Requisitos
 

@@ -69,3 +69,41 @@ variable "runner_version" {
   type        = string
   default     = "2.321.0"
 }
+
+# --- .env de la app (docker compose). Se deja en la carpeta de deploy de la ---
+# --- VM para que el job deploy del CI (docker compose up) lo encuentre ---
+# --- sin tener que pasarle los secrets en cada corrida. ---
+
+variable "app_deploy_dir" {
+  description = "Carpeta en la VM (dentro del home de vm_ssh_user) donde el CI clona el repo y corre docker compose"
+  type        = string
+  default     = "pin-app-deploy"
+}
+
+variable "mysql_root_password" {
+  description = "MySQL root password"
+  type        = string
+  sensitive   = true
+}
+
+variable "mysql_database" {
+  description = "Nombre de la base de datos MySQL"
+  type        = string
+}
+
+variable "mysql_user" {
+  description = "Usuario de aplicacion de MySQL"
+  type        = string
+}
+
+variable "mysql_password" {
+  description = "Password del usuario de aplicacion de MySQL"
+  type        = string
+  sensitive   = true
+}
+
+variable "jwt_secret" {
+  description = "Secret utilizado para firmar los JWT del backend"
+  type        = string
+  sensitive   = true
+}
