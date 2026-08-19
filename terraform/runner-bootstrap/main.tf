@@ -25,8 +25,9 @@ resource "null_resource" "runner_bootstrap" {
 
   provisioner "remote-exec" {
     inline = [
+      "set -e",
       "chmod +x /tmp/bootstrap-runner.sh",
-      "sudo GITHUB_PAT='${var.github_pat}' /tmp/bootstrap-runner.sh '${var.github_owner}' '${var.github_repo}' '${var.runner_name}' '${var.runner_labels}' '${var.runner_work_dir}' '${var.runner_version}'",
+      "sudo -n GITHUB_PAT='${var.github_pat}' /tmp/bootstrap-runner.sh '${var.github_owner}' '${var.github_repo}' '${var.runner_name}' '${var.runner_labels}' '${var.runner_work_dir}' '${var.runner_version}'",
       "rm -f /tmp/bootstrap-runner.sh",
     ]
   }
