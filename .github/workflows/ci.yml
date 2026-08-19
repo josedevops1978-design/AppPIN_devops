@@ -202,7 +202,7 @@ jobs:
   # -------------------------------------------------------------------------
   deploy:
     name: Terraform Deploy
-    runs-on: [self-hosted, virtualbox]
+    runs-on: [self-hosted, linux, x64, virtualbox]
     needs: [test, sonarqube, sbom]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
