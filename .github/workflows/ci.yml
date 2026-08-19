@@ -197,11 +197,11 @@ jobs:
             sbom-frontend.cdx.json
 
   # -------------------------------------------------------------------------
-  # DEPLOY: aplica el plan de Terraform en el self-hosted runner (la VM),
-  # dejando los contenedores de la app levantados.
+  # DEPLOY: levanta los contenedores directamente con Docker Compose en el
+  # self-hosted runner (la VM).
   # -------------------------------------------------------------------------
   deploy:
-    name: Terraform Deploy
+    name: Docker Compose Deploy
     runs-on: [self-hosted, linux, x64, virtualbox]
     needs: [test, sonarqube, sbom]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
@@ -211,21 +211,17 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v5
 
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.15.8
-
-      - name: Terraform Init
-        working-directory: terraform
-        run: terraform init
-
-      - name: Download Terraform plan
-        uses: actions/download-artifact@v5
-        with:
-          name: terraform-plan
-          path: terraform
-
-      - name: Terraform Apply
-        working-directory: terraform
-        run: terraform apply -auto-approve tfplan
+      - name: Deploy with Docker Compose
+        env:
+          MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
+          MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          MYSQL_USER: ${{ secrets.MYSQL_USER }}
+          MYSQL_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          PORT: 3000
+          DB_HOST: mysql
+          DB_PORT: 3306
+          DB_USER: ${{ secrets.MYSQL_USER }}
+          DB_PASSWORD: ${{ secrets.MYSQL_PASSWORD }}
+          DB_DATABASE: ${{ secrets.MYSQL_DATABASE }}
+          JWT_SECRET: ${{ secrets.JWT_SECRET }}
+        run: docker compose up -d --force-recreate
