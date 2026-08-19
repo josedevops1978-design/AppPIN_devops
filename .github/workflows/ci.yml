@@ -197,8 +197,8 @@ jobs:
             sbom-frontend.cdx.json
 
   # -------------------------------------------------------------------------
-  # DEPLOY: levanta los contenedores directamente con Docker Compose en el
-  # self-hosted runner (la VM).
+  # DEPLOY: hace git pull de una carpeta persistente en el runner (la VM) y
+  # levanta los contenedores con Docker Compose desde ahi.
   # -------------------------------------------------------------------------
   deploy:
     name: Docker Compose Deploy
@@ -208,10 +208,21 @@ jobs:
 
     steps:
 
-      - name: Checkout repository
-        uses: actions/checkout@v5
+      - name: Pull latest code
+        env:
+          REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+        run: |
+          DEPLOY_DIR="$HOME/pin-app-deploy"
+          if [ -d "$DEPLOY_DIR/.git" ]; then
+            git -C "$DEPLOY_DIR" fetch origin "${{ github.ref_name }}"
+            git -C "$DEPLOY_DIR" reset --hard "origin/${{ github.ref_name }}"
+          else
+            git clone --branch "${{ github.ref_name }}" "$REPO_URL" "$DEPLOY_DIR"
+          fi
+          echo "DEPLOY_DIR=$DEPLOY_DIR" >> "$GITHUB_ENV"
 
       - name: Deploy with Docker Compose
+        working-directory: ${{ env.DEPLOY_DIR }}
         env:
           MYSQL_ROOT_PASSWORD: ${{ secrets.MYSQL_ROOT_PASSWORD }}
           MYSQL_DATABASE: ${{ secrets.MYSQL_DATABASE }}
