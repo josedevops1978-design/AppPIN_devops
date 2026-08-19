@@ -1,5 +1,0 @@
-mysql_root_password = "Root123456!"
-mysql_database      = "gestion_usuarios"
-mysql_user          = "appuser"
-mysql_password      = "App123456!"
-jwt_secret          = "GestionUsuariosDevOps2026_ClaveJWT_Segura"

@@ -12,8 +12,7 @@ on:
 jobs:
 
   # -------------------------------------------------------------------------
-  # BUILD: instala dependencias, lintea, construye las imagenes Docker y
-  # valida/planifica la infraestructura de Terraform.
+  # BUILD: instala dependencias, lintea y construye las imagenes Docker.
   # -------------------------------------------------------------------------
   build:
     name: Build
@@ -57,35 +56,6 @@ jobs:
           file: ./frontend/Dockerfile
           push: false
           tags: gestion-usuarios-frontend:${{ github.sha }}
-
-      - name: Setup Terraform
-        uses: hashicorp/setup-terraform@v3
-        with:
-          terraform_version: 1.15.8
-
-      - name: Terraform Init
-        working-directory: terraform
-        run: terraform init
-
-      - name: Terraform Validate
-        working-directory: terraform
-        run: terraform validate
-
-      - name: Terraform Plan
-        working-directory: terraform
-        env:
-          TF_VAR_jwt_secret: ${{ secrets.JWT_SECRET }}
-          TF_VAR_mysql_database: ${{ secrets.MYSQL_DATABASE }}
-          TF_VAR_mysql_password: ${{ secrets.MYSQL_PASSWORD }}
-          TF_VAR_mysql_root_password: ${{ secrets.MYSQL_ROOT_PASSWORD }}
-          TF_VAR_mysql_user: ${{ secrets.MYSQL_USER }}
-        run: terraform plan -out=tfplan
-
-      - name: Upload Terraform plan
-        uses: actions/upload-artifact@v4
-        with:
-          name: terraform-plan
-          path: terraform/tfplan
 
   # -------------------------------------------------------------------------
   # TEST: corre la suite de tests con cobertura y el analisis de
