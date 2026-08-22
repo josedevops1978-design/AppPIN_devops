@@ -12,11 +12,21 @@ on:
 jobs:
 
   # -------------------------------------------------------------------------
-  # BUILD: instala dependencias, lintea y construye las imagenes Docker.
+  # BUILD: instala dependencias, lintea y construye las imágenes Docker.
   # -------------------------------------------------------------------------
   build:
-    name: Build
-    runs-on: [ubuntu-latest, self-hosted-jose]
+    name: Build en ${{ matrix.runner_name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        # Definimos cada entorno con su configuración de etiquetas exacta
+        include:
+          - runner_name: "GitHub Cloud"
+            labels: ubuntu-latest
+          - runner_name: "VM Local Jose"
+            labels: self-hosted-jose
+        
+    runs-on: ${{ matrix.labels }}
 
     steps:
 
@@ -58,8 +68,7 @@ jobs:
           tags: gestion-usuarios-frontend:${{ github.sha }}
 
   # -------------------------------------------------------------------------
-  # TEST: corre la suite de tests con cobertura y el analisis de
-  # vulnerabilidades de dependencias.
+  # TEST: corre la suite de tests con cobertura y análisis de vulnerabilidades
   # -------------------------------------------------------------------------
   test:
     name: Test
@@ -101,7 +110,7 @@ jobs:
           path: backend/coverage
 
   # -------------------------------------------------------------------------
-  # SONARQUBE: analisis estatico de calidad y seguridad de codigo.
+  # SONARQUBE: análisis estático de calidad y seguridad de código.
   # -------------------------------------------------------------------------
   sonarqube:
     name: SonarQube Analysis
@@ -128,8 +137,7 @@ jobs:
           SONAR_HOST_URL: https://sonarcloud.io
 
   # -------------------------------------------------------------------------
-  # SBOM: genera el listado de dependencias (Software Bill of Materials)
-  # del backend y del frontend en formato CycloneDX.
+  # SBOM: genera el listado de dependencias en formato CycloneDX
   # -------------------------------------------------------------------------
   sbom:
     name: SBOM
@@ -164,12 +172,22 @@ jobs:
             sbom-frontend.cdx.json
 
   # -------------------------------------------------------------------------
-  # DEPLOY: hace git pull de una carpeta persistente en el runner (la VM) y
-  # levanta los contenedores con Docker Compose desde ahi.
+  # DEPLOY: Corre en tus dos infraestructuras locales con sus etiquetas exactas
   # -------------------------------------------------------------------------
   deploy:
-    name: Docker Compose Deploy
-    runs-on: [self-hosted, linux, x64, virtualbox]
+    name: Deploy en ${{ matrix.env_name }}
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          # Mapeo exacto de los múltiples tags requeridos para la máquina vieja
+          - env_name: "Máquina Vieja (VirtualBox)"
+            labels: [self-hosted, Linux, ARM64, x64, virtualbox]
+          # Mapeo de la etiqueta simple de tu nueva máquina virtual
+          - env_name: "Nueva VM (Jose)"
+            labels: [self-hosted-jose]
+        
+    runs-on: ${{ matrix.labels }}
     needs: [test, sonarqube, sbom]
     if: github.ref == 'refs/heads/main' && github.event_name == 'push'
 
@@ -177,10 +195,8 @@ jobs:
 
       - name: Pull latest code
         env:
-          REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+          REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com{{ github.repository }}.git
         run: |
-          # DEPLOY_DIR ya existe con un .env (lo deja terraform/runner-bootstrap),
-          # asi que no se puede usar 'git clone' (falla en directorio no vacio).
           DEPLOY_DIR="$HOME/pin-app-deploy"
           mkdir -p "$DEPLOY_DIR"
           if [ ! -d "$DEPLOY_DIR/.git" ]; then
@@ -192,7 +208,5 @@ jobs:
           echo "DEPLOY_DIR=$DEPLOY_DIR" >> "$GITHUB_ENV"
 
       - name: Deploy with Docker Compose
-        # Las variables las toma del .env que dejo terraform/runner-bootstrap
-        # en DEPLOY_DIR (docker compose lo lee automaticamente de ese directorio).
         working-directory: ${{ env.DEPLOY_DIR }}
         run: docker compose up -d --force-recreate
