@@ -12,7 +12,7 @@ on:
 jobs:
 
   # -------------------------------------------------------------------------
-  # BUILD: instala dependencias, lintea y construye las imágenes Docker.
+  # BUILD: instala dependencias, lintea y construye las imágenes Docker..
   # -------------------------------------------------------------------------
   build:
     name: Build en ${{ matrix.runner_name }}
