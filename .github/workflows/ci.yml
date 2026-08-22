@@ -195,7 +195,7 @@ jobs:
 
       - name: Pull latest code
         env:
-          REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com${{ github.repository }}.git
+          REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com/${{ github.repository }}.git
         run: |
           DEPLOY_DIR="$HOME/pin-app-deploy"
           mkdir -p "$DEPLOY_DIR"
