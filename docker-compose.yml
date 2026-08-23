@@ -1,46 +1,32 @@
-
 services:
 
   mysql:
-
     image: mysql:8.4
-
     container_name: mysql-gestion-usuarios
-
     restart: unless-stopped
-
     environment:
       MYSQL_ROOT_PASSWORD: ${MYSQL_ROOT_PASSWORD}
       MYSQL_DATABASE: ${MYSQL_DATABASE}
       MYSQL_USER: ${MYSQL_USER}
       MYSQL_PASSWORD: ${MYSQL_PASSWORD}
-
     ports:
       - "3307:3306"
-
     volumes:
       - mysql_data:/var/lib/mysql
       - ./database/init:/docker-entrypoint-initdb.d
-
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 5
 
-
   backend:
-
     build: ./backend
-
     container_name: backend-gestion-usuarios
-
     restart: unless-stopped
-
     depends_on:
       mysql:
         condition: service_healthy
-
     environment:
       PORT: ${PORT}
       DB_HOST: ${DB_HOST}
@@ -49,28 +35,17 @@ services:
       DB_PASSWORD: ${DB_PASSWORD}
       DB_DATABASE: ${DB_DATABASE}
       JWT_SECRET: ${JWT_SECRET}
-
     ports:
       - "3001:3000"
 
-
   frontend:
-
     build: ./frontend
-
     container_name: frontend-gestion-usuarios
-
     restart: unless-stopped
-
     depends_on:
       - backend
-
     ports:
       - "3000:80"
-
-    volumes:
-
-      mysql_data:
 
   node-exporter:
     image: prom/node-exporter:latest
@@ -105,11 +80,11 @@ services:
     container_name: grafana
     restart: unless-stopped
     ports:
-      - "3100:3000" # Mapeamos al 3100 para no chocar con el puerto 3000 si tu App lo usa
+      - "3100:3000"
     volumes:
       - grafana-data:/var/lib/grafana
 
 volumes:
+  mysql_data:
   prometheus-data:
   grafana-data:
-  
