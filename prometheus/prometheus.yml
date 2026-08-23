@@ -12,7 +12,8 @@ scrape_configs:
     static_configs:
       - targets: ['node-exporter:9100']
 
-  # (Opcional) Si tu backend expone métricas en un puerto (ej: 8080/metrics)
-  # - job_name: 'mi-app-backend'
-  #   static_configs:
-  #     - targets: ['backend:8080']
+  # Monitoreo del Backend en Node.js (Descomentado y corregido)
+  - job_name: 'nodejs-backend'
+    scrape_interval: 5s
+    static_configs:
+      - targets: ['backend-gestion-usuarios:3000']
