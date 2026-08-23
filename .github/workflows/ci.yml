@@ -195,12 +195,14 @@ jobs:
 
       - name: Pull latest code
         env:
-          REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@://github.com/${{ github.repository }}.git
+          #REPO_URL: https://x-access-token:${{ secrets.GITHUB_TOKEN }}@github.com/${{ github.repository }}.git
+	  REPO_URL: https://github.com{{ github.repository }}.git
         run: |
           DEPLOY_DIR="$HOME/pin-app-deploy"
           mkdir -p "$DEPLOY_DIR"
           if [ ! -d "$DEPLOY_DIR/.git" ]; then
             git -C "$DEPLOY_DIR" init
+            git -C "$DEPLOY_DIR" config --local init.defaultBranch main
             git -C "$DEPLOY_DIR" remote add origin "$REPO_URL"
           fi
           git -C "$DEPLOY_DIR" fetch origin "${{ github.ref_name }}"
