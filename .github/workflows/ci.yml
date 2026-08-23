@@ -204,6 +204,9 @@ jobs:
             git -C "$DEPLOY_DIR" init
             git -C "$DEPLOY_DIR" config --local init.defaultBranch main
             git -C "$DEPLOY_DIR" remote add origin "$REPO_URL"
+          else
+            # SI YA EXISTE, forzamos a Git a actualizar la URL con la nueva sintaxis limpia
+            git -C "$DEPLOY_DIR" remote set-url origin "$REPO_URL"
           fi
           git -C "$DEPLOY_DIR" fetch origin "${{ github.ref_name }}"
           git -C "$DEPLOY_DIR" checkout -f -B "${{ github.ref_name }}" "origin/${{ github.ref_name }}"
