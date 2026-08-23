@@ -1,0 +1,18 @@
+global:
+  scrape_interval: 15s # Tiempo entre cada recolección de métricas
+
+scrape_configs:
+  # Monitoreo del propio servidor Prometheus
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  # Monitoreo del Sistema Operativo de tu Debian
+  - job_name: 'node-exporter'
+    static_configs:
+      - targets: ['node-exporter:9100']
+
+  # (Opcional) Si tu backend expone métricas en un puerto (ej: 8080/metrics)
+  # - job_name: 'mi-app-backend'
+  #   static_configs:
+  #     - targets: ['backend:8080']
