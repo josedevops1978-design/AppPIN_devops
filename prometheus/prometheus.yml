@@ -17,3 +17,8 @@ scrape_configs:
     scrape_interval: 5s
     static_configs:
       - targets: ['backend-gestion-usuarios:3000']
+
+  # Monitoreo de MySQL
+  - job_name: 'mysqld-exporter'
+    static_configs:
+      - targets: ['mysqld-exporter:9104']
