@@ -15,18 +15,8 @@ jobs:
   # BUILD: instala dependencias, lintea y construye las imágenes Docker..
   # -------------------------------------------------------------------------
   build:
-    name: Build en ${{ matrix.runner_name }}
-    strategy:
-      fail-fast: false
-      matrix:
-        # Definimos cada entorno con su configuración de etiquetas exacta
-        include:
-          - runner_name: "GitHub Cloud"
-            labels: ubuntu-latest
-          - runner_name: "VM Local Jose"
-            labels: self-hosted-jose
-        
-    runs-on: ${{ matrix.labels }}
+    name: Build
+    runs-on: ubuntu-latest
 
     steps:
 

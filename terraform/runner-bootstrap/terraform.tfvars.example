@@ -12,8 +12,10 @@ github_owner = "matiaspasa-cloudhesive"
 github_repo  = "AppPIN_devops"
 github_pat   = "CHANGE_ME" # PAT con permiso Administration: Read and write sobre el repo
 
+# El label con el runner_name (ultimo elemento) permite targetear este runner
+# especifico en un matrix de ci.yml cuando hay mas de un runner registrado.
 runner_name     = "virtualbox-runner-01"
-runner_labels   = "self-hosted,linux,x64,virtualbox"
+runner_labels   = "self-hosted,linux,x64,virtualbox,virtualbox-runner-01"
 runner_work_dir = "_work"
 runner_version  = "2.321.0"
 
